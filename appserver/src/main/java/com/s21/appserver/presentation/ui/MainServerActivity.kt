@@ -1,4 +1,4 @@
-package com.s21.appserver
+package com.s21.appserver.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
