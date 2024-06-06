@@ -14,4 +14,9 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "testnti"
-include(":app")
+include(":appclient")
+include(":appserver")
+include(":domain")
+include(":dataclient")
+include(":dataserver")
+include(":websocket")

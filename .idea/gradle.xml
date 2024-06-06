@@ -10,7 +10,12 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/appclient" />
+            <option value="$PROJECT_DIR$/appserver" />
+            <option value="$PROJECT_DIR$/dataclient" />
+            <option value="$PROJECT_DIR$/dataserver" />
+            <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/websocket" />
           </set>
         </option>
       </GradleProjectSettings>
