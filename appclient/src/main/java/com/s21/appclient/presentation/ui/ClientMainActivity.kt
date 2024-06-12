@@ -1,5 +1,7 @@
 package com.s21.appclient.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 
@@ -34,9 +36,21 @@ class ClientMainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Text("I am a clent")
-            Button(onClick = { sendMessage("i_want_to_launch_chrome") }) {
+            Button(onClick = { sendMessage("i_want_to_launch_the_chrome") }) {
                 Text("launch Chrome")
             }
+//            Button(onClick = {
+//                Log.d("ClientLog", "я кнопка")
+//                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://"))
+//                startActivity(browserIntent)
+////                val chromeIntent = packageManager.getLaunchIntentForPackage("com.android.chrome")
+////                chromeIntent?.let {
+////                    Log.d("ClientLog", "пытаюсь запустить хром")
+////                    startActivity(it)
+////                }
+//            }) {
+//                Text("launch Chrome 2")
+//            }
         }
         connectWebSocket()
     }
@@ -47,18 +61,25 @@ class ClientMainActivity : ComponentActivity() {
                 client.webSocket(host = "10.0.2.2", port = 8080, path = "/echo") {
                     Log.d("ClientLog", "Connected to WebSocket server")
                     webSocketSession = this
-                    launch {
-                        while (true) {
-                            delay(5000L)
-                            send(Frame.Text("Привет от клиента!!!"))
-                        }
-                    }
+//                    launch {
+//                        while (true) {
+//                            delay(5000L)
+                    send(Frame.Text("Привет от клиента!!!"))
+//                        }
+//                    }
 
                     for (frame in incoming) {
                         when (frame) {
                             is Frame.Text -> {
                                 val text = frame.readText()
                                 Log.d("ClientLog", "Received: $text")
+
+                                if (text == "yes_u_can_launch_the_chrome"){
+
+                                    Log.d("ClientLog", "пытаюсь запустить хром")
+                                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://"))
+                                    startActivity(browserIntent)
+                                }
                             }
 
                             else -> {
@@ -80,6 +101,8 @@ class ClientMainActivity : ComponentActivity() {
             webSocketSession?.send(Frame.Text(message)) ?: Log.e("ClientLog", "WebSocket session is null")
         }
     }
+
+
 
     override fun onDestroy() {
         super.onDestroy()

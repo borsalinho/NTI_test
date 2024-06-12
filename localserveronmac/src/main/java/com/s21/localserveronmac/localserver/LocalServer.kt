@@ -37,14 +37,15 @@ fun LocalServer() {
         routing {
 
             webSocket("/echo") {
-                clients[this] = this.hashCode().toString()
+
 
                 try {
                     val initialMessage = (incoming.receive() as? Frame.Text)?.readText()
                     if (initialMessage == "i_am_main_client") {
                         mainClientSession = this
-                        clients[this] = "main_client"
                         send(Frame.Text("Я теперь главный клиент"))
+                    } else {
+                        clients[this] = this.hashCode().toString()
                     }
 
                     for (frame in incoming) {

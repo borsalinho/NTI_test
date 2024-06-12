@@ -35,7 +35,7 @@ class ServerMainActivity : ComponentActivity() {
 
     private var webSocketSession: WebSocketSession? = null
 
-    private val clientRequests = mutableMapOf<String, String>()
+//    private val clientRequests = mutableMapOf<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -59,13 +59,20 @@ class ServerMainActivity : ComponentActivity() {
                                 val text = frame.readText()
                                 Log.d("MainClientLog", "Получено: $text")
                                 if (text.startsWith("from_client:")){
+                                    // приходит from_clent:№:text
                                     val clientId = text.split(":")[1]
-                                    clientRequests[clientId] = text
-                                    send(Frame.Text("response_for:$clientId: сообщение от главного клиента для клиента №$clientId"))
+                                    val messageFromClient = text.split(":")[2]
+                                    Log.d("MainClientLog", "messageFromClient = $messageFromClient")
+                                    if (messageFromClient.trim() == "i_want_to_launch_the_chrome") {
+                                        send(Frame.Text("response_for:$clientId:yes_u_can_launch_the_chrome"))
+                                        Log.d("MainClientLog", "response_for:$clientId:yes_u_can_launch_the_chrome")
+                                    }
+//                                    clientRequests[clientId] = text
 
-                                    Log.d("MainClientLog", "Отправлено: $text")
+
+
                                 }
-                                // приходит from_clent:№:text
+
 
                             }
 
