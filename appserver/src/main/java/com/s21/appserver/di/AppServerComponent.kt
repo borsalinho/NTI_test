@@ -1,6 +1,6 @@
 package com.s21.appserver.di
 
-import com.s21.appserver.ui.MainServerActivity
+import com.s21.appserver.ui.ServerMainActivity
 import com.s21.domain.di.DomainComponent
 import dagger.Component
 import javax.inject.Singleton
@@ -17,7 +17,7 @@ interface AppServerComponent {
         ]
     )
     interface AppClientComponent : AppServerComponent {
-        fun inject(mainServerActivity: MainServerActivity)
+        fun inject(mainServerActivity: ServerMainActivity)
 
     }
 }

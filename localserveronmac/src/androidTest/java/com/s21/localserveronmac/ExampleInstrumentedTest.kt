@@ -1,4 +1,4 @@
-package com.s21.websocket
+package com.s21.localserveronmac
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.s21.websocket.test", appContext.packageName)
+        assertEquals("com.s21.localserveronmac.test", appContext.packageName)
     }
 }

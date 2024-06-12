@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Testnti">
         <activity
-            android:name=".ui.MainServerActivity"
+            android:name=".ui.ServerMainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Testnti">

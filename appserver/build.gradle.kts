@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.com.intellij.openapi.vfs.StandardFileSystems.jar
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -49,7 +51,9 @@ android {
         }
     }
     packagingOptions { resources.excludes.add("META-INF/*") }
+
 }
+
 
 dependencies {
 
@@ -59,13 +63,11 @@ dependencies {
     implementation("com.google.dagger:dagger:2.45")
     kapt("com.google.dagger:dagger-compiler:2.45")
 
-    // kror server
-    implementation("io.ktor:ktor-server-core:2.3.1")
-    implementation("io.ktor:ktor-server-netty:2.3.1")
-    implementation("io.ktor:ktor-server-websockets:2.3.1")
-    implementation("io.ktor:ktor-server-host-common:2.3.1")
-    implementation("io.ktor:ktor-server-sessions:2.3.1")
-    implementation("ch.qos.logback:logback-classic:1.2.11")
+    // kror client
+    implementation("io.ktor:ktor-client-core:2.3.1")
+    implementation("io.ktor:ktor-client-cio:2.3.1")
+    implementation("io.ktor:ktor-client-websockets:2.3.1")
+
 
 
     implementation("androidx.core:core-ktx:1.9.0")

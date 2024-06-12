@@ -4,8 +4,8 @@ plugins {
 }
 
 android {
-    namespace = "com.s21.websocket"
-    compileSdk = 33
+    namespace = "com.s21.localserveronmac"
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
@@ -24,18 +24,23 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
 
+    // kror server
+    implementation("io.ktor:ktor-server-core:2.3.1")
+    implementation("io.ktor:ktor-server-netty:2.3.1")
+    implementation("io.ktor:ktor-server-websockets:2.3.1")
+
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

@@ -1,4 +1,4 @@
-package com.s21.websocket
+package com.s21.localserveronmac
 
 import org.junit.Test
 
