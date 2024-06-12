@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.s21.dataclient"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24

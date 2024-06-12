@@ -23,7 +23,7 @@ fun main(){
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun LocalServer() {
+internal fun LocalServer() {
     var mainClientSession: WebSocketSession? = null
     val clients = ConcurrentHashMap<WebSocketSession, String>()
 
@@ -35,10 +35,7 @@ fun LocalServer() {
             masking = false
         }
         routing {
-
             webSocket("/echo") {
-
-
                 try {
                     val initialMessage = (incoming.receive() as? Frame.Text)?.readText()
                     if (initialMessage == "i_am_main_client") {
@@ -53,8 +50,6 @@ fun LocalServer() {
                             val receivedText = frame.readText()
 
                             if (receivedText.startsWith("response_for:")) {
-                                // приходит от гл клиента
-                                // response_for:№: сообщение от главного клиента для клиента"
                                 val parts = receivedText.split(":")
                                 val clientId = parts[1]
                                 val response = parts[2]
@@ -63,7 +58,6 @@ fun LocalServer() {
                             }
 
                             else if (mainClientSession != null && mainClientSession != this) {
-                                // от клиентов приходит любое сообщение и идет к гл серверу
                                 mainClientSession?.send(Frame.Text("from_client:${clients[this]}: $receivedText"))
                             }
                         }
@@ -72,28 +66,12 @@ fun LocalServer() {
                     e.printStackTrace()
                 } finally {
                     clients.remove(this)
+                    if (mainClientSession == this) {
+                        mainClientSession = null // Reset mainClientSession if it disconnects
+                    }
                 }
             }
 
         }
     }.start(wait = true)
 }
-
-//launch {
-//    while (true) {
-//        delay(5000L)
-//        send(Frame.Text("Привет от сервера"))
-//    }
-//}
-//
-//for (frame in incoming) {
-//    when (frame) {
-//        is Frame.Text -> {
-//            val text = frame.readText()
-////                            println("Received: $text")
-//        }
-//        else -> {
-////                            println("Received non-text frame")
-//        }
-//    }
-//}

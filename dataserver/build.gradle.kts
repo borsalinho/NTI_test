@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.s21.dataserver"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
@@ -33,6 +33,13 @@ android {
 }
 
 dependencies {
+
+    implementation(project(":domain"))
+
+    // kror client
+    implementation("io.ktor:ktor-client-core:2.3.1")
+    implementation("io.ktor:ktor-client-cio:2.3.1")
+    implementation("io.ktor:ktor-client-websockets:2.3.1")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

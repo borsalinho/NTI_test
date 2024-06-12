@@ -1,123 +1,34 @@
 package com.s21.appserver.ui
 
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
-import androidx.compose.material3.Text
-import androidx.lifecycle.lifecycleScope
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.websocket.WebSockets
-import io.ktor.client.plugins.websocket.webSocket
-
-
-import io.ktor.websocket.Frame
-import io.ktor.websocket.WebSocketSession
-import io.ktor.websocket.readText
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
+import com.s21.appserver.app.AppServer
+import com.s21.appserver.presentation.ui.ServerMainScreen
+import com.s21.appserver.presentation.viewmodel.ServerViewModel
+import javax.inject.Inject
 
 
 class ServerMainActivity : ComponentActivity() {
 
-    private val client = HttpClient(CIO) {
-        install(WebSockets) {
-            pingInterval = 20_000
-        }
-    }
+    @Inject
+    lateinit var serverViewModel: ServerViewModel
 
-    private var webSocketSession: WebSocketSession? = null
-
-//    private val clientRequests = mutableMapOf<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
+        val appServer = application as AppServer
+        appServer.appServerComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContent {
-            Text("I am a SERVER-CLIENT")
+            ServerMainScreen(serverViewModel)
         }
-        connectWebSocket()
+
     }
-
-    private fun connectWebSocket() {
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                client.webSocket(host = "10.0.2.2", port = 8080, path = "/echo") {
-                    Log.d("MainClientLog", "Connected to WebSocket server")
-                    send(Frame.Text("i_am_main_client"))
-                    webSocketSession = this
-
-                    for (frame in incoming) {
-                        when (frame) {
-                            is Frame.Text -> {
-                                val text = frame.readText()
-                                Log.d("MainClientLog", "Получено: $text")
-                                if (text.startsWith("from_client:")){
-                                    // приходит from_clent:№:text
-                                    val clientId = text.split(":")[1]
-                                    val messageFromClient = text.split(":")[2]
-                                    Log.d("MainClientLog", "messageFromClient = $messageFromClient")
-                                    if (messageFromClient.trim() == "i_want_to_launch_the_chrome") {
-                                        send(Frame.Text("response_for:$clientId:yes_u_can_launch_the_chrome"))
-                                        Log.d("MainClientLog", "response_for:$clientId:yes_u_can_launch_the_chrome")
-                                    }
-//                                    clientRequests[clientId] = text
-
-
-
-                                }
-
-
-                            }
-
-                            else -> {
-                                Log.d("MainClientLog", "Received non-text frame")
-                            }
-                        }
-                    }
-
-
-                }
-            } catch (e: Exception) {
-                Log.e("MainClientLog", "Error during WebSocket connection: ${e.message}", e)
-            }
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-        lifecycleScope.launch {
-            client.close()
-        }
+        serverViewModel.stopServer() // Custom method to cancel active jobs in ViewModel
     }
-
 }
-
-//                    launch {
-//                        while (true) {
-//                            delay(5000L)
-//                            send(Frame.Text("Привет от главного клиента(сервера)!!!"))
-//                        }
-//                    }
-
-//for (frame in incoming) {
-//    when (frame) {
-//        is Frame.Text -> {
-//            val text = frame.readText()
-//            Log.d("WebSocket", "Received: $text")
-//        }
-//
-//        else -> {
-//            Log.d("WebSocket", "Received non-text frame")
-//        }
-//    }
-//}
 
 
 

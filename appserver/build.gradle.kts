@@ -58,6 +58,7 @@ android {
 dependencies {
 
     implementation(project(":domain"))
+    implementation(project(":dataserver")) //  для даггера
 
     //Dagger2
     implementation("com.google.dagger:dagger:2.45")
