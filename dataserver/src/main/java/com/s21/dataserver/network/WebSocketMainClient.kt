@@ -42,11 +42,6 @@ class WebSocketMainClient {
                                         Log.d("MainClient", "response_for:$clientId:yes_u_can_launch_the_chrome")
                                     }
 
-
-//                                        send(Frame.Text("response_for:$clientId:и тебе привет"))
-
-
-
                                 }
 
                             }
