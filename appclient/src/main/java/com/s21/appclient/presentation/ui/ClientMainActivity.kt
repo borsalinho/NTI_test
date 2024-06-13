@@ -1,130 +1,29 @@
 package com.s21.appclient.ui
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.lifecycle.lifecycleScope
+import com.s21.appclient.app.AppClient
+import com.s21.appclient.presentation.ui.ClientMainScreen
+import com.s21.appclient.presentation.viewmodel.ClientViewModel
 
+import javax.inject.Inject
 
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.websocket.*
-import io.ktor.websocket.Frame
-import io.ktor.websocket.WebSocketSession
-import io.ktor.websocket.readText
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
-class ClientMainActivity : ComponentActivity() {
-
-    private val client = HttpClient(CIO) {
-        install(WebSockets) {
-            pingInterval = 20_000
-        }
-    }
-
-    private var webSocketSession: WebSocketSession? = null
+class ClientMainActivity : ComponentActivity(){
+    @Inject
+    lateinit var clientViewModel: ClientViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val appServer = application as AppClient
+        appServer.appClientComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContent {
-            Text("I am a clent")
-            Button(onClick = { sendMessage("i_want_to_launch_the_chrome") }) {
-                Text("launch Chrome")
-            }
-//            Button(onClick = {
-//                Log.d("ClientLog", "я кнопка")
-//                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://"))
-//                startActivity(browserIntent)
-////                val chromeIntent = packageManager.getLaunchIntentForPackage("com.android.chrome")
-////                chromeIntent?.let {
-////                    Log.d("ClientLog", "пытаюсь запустить хром")
-////                    startActivity(it)
-////                }
-//            }) {
-//                Text("launch Chrome 2")
-//            }
+            ClientMainScreen(clientViewModel)
         }
-        connectWebSocket()
+
     }
-
-    private fun connectWebSocket() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                client.webSocket(host = "10.0.2.2", port = 8080, path = "/echo") {
-                    Log.d("ClientLog", "Connected to WebSocket server")
-                    webSocketSession = this
-//                    launch {
-//                        while (true) {
-//                            delay(5000L)
-                    send(Frame.Text("Привет от клиента!!!"))
-//                        }
-//                    }
-
-                    for (frame in incoming) {
-                        when (frame) {
-                            is Frame.Text -> {
-                                val text = frame.readText()
-                                Log.d("ClientLog", "Received: $text")
-
-                                if (text == "yes_u_can_launch_the_chrome"){
-
-                                    Log.d("ClientLog", "пытаюсь запустить хром")
-                                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://"))
-                                    startActivity(browserIntent)
-                                }
-                            }
-
-                            else -> {
-                                Log.d("ClientLog", "Received non-text frame")
-                            }
-                        }
-                    }
-
-
-                }
-            } catch (e: Exception) {
-                Log.e("ClientLog", "Error during WebSocket connection: ${e.message}", e)
-            }
-        }
-    }
-
-    private fun sendMessage(message: String) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            webSocketSession?.send(Frame.Text(message)) ?: Log.e("ClientLog", "WebSocket session is null")
-        }
-    }
-
-
-
     override fun onDestroy() {
         super.onDestroy()
-        lifecycleScope.launch {
-            client.close()
-        }
+        clientViewModel.stopServer()
     }
-
 }
-
-
-//for (frame in incoming) {
-//    when (frame) {
-//        is Frame.Text -> {
-//            val text = frame.readText()
-//            Log.d("WebSocket", "Received: $text")
-//        }
-//
-//        else -> {
-//            Log.d("WebSocket", "Received non-text frame")
-//        }
-//    }
-//}
-
-

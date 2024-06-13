@@ -26,12 +26,6 @@ class ServerMainActivity : ComponentActivity() {
     }
     override fun onDestroy() {
         super.onDestroy()
-        serverViewModel.stopServer() // Custom method to cancel active jobs in ViewModel
+        serverViewModel.stopServer()
     }
 }
-
-
-
-
-
-

@@ -53,15 +53,16 @@ android {
 dependencies {
 
     implementation(project(":domain"))
+    implementation(project(":dataclient")) //  для даггера
 
     //Dagger2
     implementation("com.google.dagger:dagger:2.45")
     kapt("com.google.dagger:dagger-compiler:2.45")
 
-    // kror client
-    implementation("io.ktor:ktor-client-core:2.3.1")
-    implementation("io.ktor:ktor-client-cio:2.3.1")
-    implementation("io.ktor:ktor-client-websockets:2.3.1")
+//    // kror client
+//    implementation("io.ktor:ktor-client-core:2.3.1")
+//    implementation("io.ktor:ktor-client-cio:2.3.1")
+//    implementation("io.ktor:ktor-client-websockets:2.3.1")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0")

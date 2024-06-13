@@ -22,5 +22,4 @@ class DomainModule {
         return StopServerUseCase(serverRepository = serverRepository)
     }
 
-
 }

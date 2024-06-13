@@ -32,7 +32,23 @@ class WebSocketMainClient {
                         when (frame) {
                             is Frame.Text -> {
                                 val text = frame.readText()
-                                Log.d("MainClient", "Пришло: $text")
+                                Log.d("MainClient", "Получено: $text")
+                                if (text.startsWith("from_client:")){
+                                    val clientId = text.split(":")[1]
+                                    val messageFromClient = text.split(":")[2]
+                                    Log.d("MainClient", "messageFromClient = $messageFromClient")
+                                    if (messageFromClient.trim() == "i_want_to_launch_the_chrome") {
+                                        send(Frame.Text("response_for:$clientId:yes_u_can_launch_the_chrome"))
+                                        Log.d("MainClient", "response_for:$clientId:yes_u_can_launch_the_chrome")
+                                    }
+
+
+//                                        send(Frame.Text("response_for:$clientId:и тебе привет"))
+
+
+
+                                }
+
                             }
                             else -> {
                                 Log.d("MainClient", "Это не текст!")

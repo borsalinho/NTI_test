@@ -23,7 +23,7 @@ fun main(){
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-internal fun LocalServer() {
+fun LocalServer() {
     var mainClientSession: WebSocketSession? = null
     val clients = ConcurrentHashMap<WebSocketSession, String>()
 
@@ -40,7 +40,7 @@ internal fun LocalServer() {
                     val initialMessage = (incoming.receive() as? Frame.Text)?.readText()
                     if (initialMessage == "i_am_main_client") {
                         mainClientSession = this
-                        send(Frame.Text("Я теперь главный клиент"))
+                        send(Frame.Text("ТЫ теперь главный клиент"))
                     } else {
                         clients[this] = this.hashCode().toString()
                     }
